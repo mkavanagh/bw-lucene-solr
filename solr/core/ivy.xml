@@ -78,6 +78,13 @@
      -->
     <dependency org="org.apache.hadoop" name="hadoop-annotations" rev="${/org.apache.hadoop/hadoop-annotations}" conf="compile.hadoop"/>
 
+    <!-- Hadoop AWS Dependencies -->
+    <dependency org="org.apache.hadoop" name="hadoop-aws" rev="${/org.apache.hadoop/hadoop-aws}" conf="compile.hadoop"/>
+    <dependency org="com.amazonaws" name="aws-java-sdk-s3" rev="${/com.amazonaws/aws-java-sdk-s3}" conf="compile.hadoop"/>
+    <dependency org="com.amazonaws" name="aws-java-sdk-kms" rev="${/com.amazonaws/aws-java-sdk-kms}" conf="compile.hadoop"/>
+    <dependency org="com.amazonaws" name="aws-java-sdk-core" rev="${/com.amazonaws/aws-java-sdk-core}" conf="compile.hadoop"/>
+    <dependency org="com.amazonaws" name="jmespath-java" rev="${/com.amazonaws/jmespath-java}" conf="compile.hadoop"/>
+
     <dependency org="org.apache.commons" name="commons-configuration2" rev="${/org.apache.commons/commons-configuration2}" conf="compile.hadoop"/>
     <dependency org="commons-collections" name="commons-collections" rev="${/commons-collections/commons-collections}" conf="compile.hadoop"/>
     <dependency org="com.github.ben-manes.caffeine" name="caffeine" rev="${/com.github.ben-manes.caffeine/caffeine}" conf="compile.hadoop"/>
