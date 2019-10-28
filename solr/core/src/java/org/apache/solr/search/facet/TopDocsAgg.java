@@ -285,9 +285,9 @@ public class TopDocsAgg extends AggValueSource {
       int offset = 0;
       TopDocs topDocs = fcontext.searcher.search(finalQuery, limit, sort);
 
-      long totalHits = topDocs.totalHits;
+      long totalHits = topDocs.totalHits.value;
       int nDocsReturned = topDocs.scoreDocs.length;
-      float maxScore = totalHits>0 ? topDocs.getMaxScore() : 0.0f;
+      float maxScore = totalHits > 0 ? topDocs.scoreDocs[0].score : 0.0f;
       int[] ids = new int[nDocsReturned];
       float scores[] = doScores ? new float[nDocsReturned] : null;
       for (int i=0; i<nDocsReturned; i++) {
@@ -299,7 +299,7 @@ public class TopDocsAgg extends AggValueSource {
 
       result[slot] = new BasicResultContext(docList, returnFields , fcontext.searcher, query, fcontext.req);
 
-      return (int)topDocs.totalHits;
+      return (int)topDocs.totalHits.value;
     }
 
     @Override
