@@ -336,7 +336,7 @@ enum CoreAdminOperation implements CoreAdminOp {
               info.add("cloud", cloudInfo);
             }
             if (isIndexInfoNeeded) {
-              RefCounted<SolrIndexSearcher> searcher = core.getSearcher();
+              RefCounted<SolrIndexSearcher> searcher = core.getNewestSearcher(false);
               try {
                 SimpleOrderedMap<Object> indexInfo = LukeRequestHandler.getIndexInfo(searcher.get().getIndexReader());
                 long size = core.getIndexSize();
