@@ -1,7 +1,5 @@
 package org.apache.solr.search.facet;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -73,7 +71,7 @@ public class BitmapCollectorAgg extends SimpleAggValueSource {
       byte[] serialised;
       if (result[slotNum] != null) {
         result[slotNum].runOptimize();
-        serialised = bitmapToBytes(result[slotNum]);
+        serialised = BitmapUtil.bitmapToBytes(result[slotNum]);
       } else {
         serialised = new byte[0];
       }
@@ -116,20 +114,9 @@ public class BitmapCollectorAgg extends SimpleAggValueSource {
     public Object getMergedResult() {
       combined.runOptimize();
       SimpleOrderedMap map = new SimpleOrderedMap();
-      map.add(KEY, bitmapToBytes(combined));
+      map.add(KEY, BitmapUtil.bitmapToBytes(combined));
       return map;
     }
   }
 
-  private static byte[] bitmapToBytes(MutableRoaringBitmap bitmap) {
-    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    DataOutputStream dos = new DataOutputStream(bos);
-    try {
-      bitmap.serialize(dos);
-      dos.close();
-      return bos.toByteArray();
-    } catch (IOException ioe) {
-      throw new RuntimeException("Failed to serialise RoaringBitmap to bytes", ioe);
-    }
-  }
 }
