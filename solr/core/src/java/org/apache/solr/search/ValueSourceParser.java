@@ -59,6 +59,7 @@ import org.apache.solr.search.facet.AvgAgg;
 import org.apache.solr.search.facet.BitmapCollectorAgg;
 import org.apache.solr.search.facet.BitmapFrequencyAgg;
 import org.apache.solr.search.facet.CountAgg;
+import org.apache.solr.search.facet.FrequencyOfFrequenciesAgg;
 import org.apache.solr.search.facet.HLLAgg;
 import org.apache.solr.search.facet.MinMaxAgg;
 import org.apache.solr.search.facet.PercentileAgg;
@@ -1061,6 +1062,8 @@ public abstract class ValueSourceParser implements NamedListInitializedPlugin {
     addParser("agg_bitmapcollector", new BitmapCollectorAgg.Parser());
 
     addParser("agg_bitmapfreq", new BitmapFrequencyAgg.Parser());
+
+    addParser("agg_bitmapfreqfreq", new FrequencyOfFrequenciesAgg.Parser());
 
     addParser("childfield", new ChildFieldValueSourceParser());
   }
