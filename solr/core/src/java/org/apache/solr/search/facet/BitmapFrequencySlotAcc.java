@@ -33,11 +33,24 @@ public class BitmapFrequencySlotAcc extends FuncSlotAcc {
 
   @Override
   public Object getValue(int slotNum) {
-    if (result[slotNum] != null) {
-      return result[slotNum].serialize();
+    if (fcontext.isShard()) {
+      return getShardValue(result[slotNum]);
+    } else {
+      return getFinalValue(result[slotNum]);
+    }
+  }
+
+  public Object getShardValue(BitmapFrequencyCounter result) {
+    if (result != null) {
+      return result.serialize();
     } else {
       return Collections.emptyList();
     }
+  }
+
+  public Object getFinalValue(BitmapFrequencyCounter result) {
+    result.normalize();
+    return getShardValue(result);
   }
 
   @Override

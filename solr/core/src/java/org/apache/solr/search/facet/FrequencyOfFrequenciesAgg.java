@@ -28,7 +28,7 @@ public class FrequencyOfFrequenciesAgg extends SimpleAggValueSource {
 
   @Override
   public SlotAcc createSlotAcc(FacetContext fcontext, int numDocs, int numSlots) {
-    return new BitmapFrequencySlotAcc(getArg(), fcontext, numSlots, size);
+    return new BitmapFrequencyOfFrequenciesSlotAcc(getArg(), fcontext, numSlots, size);
   }
 
   @Override
@@ -76,22 +76,8 @@ public class FrequencyOfFrequenciesAgg extends SimpleAggValueSource {
 
     @Override
     public Object getMergedResult() {
-      Map<Integer, Integer> map = new LinkedHashMap<>();
-
       result.normalize();
-
-      int[] lowFrequencies = result.decode();
-      for (int i = 0; i < lowFrequencies.length; i++) {
-        int value = lowFrequencies[i];
-        if (value > 0) {
-          map.put(i, value);
-        }
-      }
-
-      result.getOverflow()
-        .forEach((value, freq) -> map.merge(freq, 1, Integer::sum));
-
-      return map;
+      return result.toFrequencyOfFrequencies();
     }
   }
 }

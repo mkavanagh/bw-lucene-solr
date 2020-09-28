@@ -2,6 +2,7 @@ package org.apache.solr.search.facet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -251,6 +252,22 @@ public class BitmapFrequencyCounter {
       }
       return freq;
     });
+  }
+
+  public Map<Integer, Integer> toFrequencyOfFrequencies() {
+    Map<Integer, Integer> map = new LinkedHashMap<>();
+
+    int[] lowFrequencies = decode();
+    for (int i = 0; i < lowFrequencies.length; i++) {
+      int value = lowFrequencies[i];
+      if (value > 0) {
+        map.put(i, value);
+      }
+    }
+
+    overflow.forEach((value, freq) -> map.merge(freq, 1, Integer::sum));
+
+    return map;
   }
 
   public int[] decode() {
