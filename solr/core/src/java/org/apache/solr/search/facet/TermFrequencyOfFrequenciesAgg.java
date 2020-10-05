@@ -1,8 +1,5 @@
 package org.apache.solr.search.facet;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.apache.lucene.queries.function.ValueSource;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.solr.search.FunctionQParser;
@@ -25,7 +22,7 @@ public class TermFrequencyOfFrequenciesAgg extends SimpleAggValueSource {
 
   @Override
   public FacetMerger createFacetMerger(Object prototype) {
-    return new Merger(termLimit);
+    return new Merger();
   }
 
   public static class Parser extends ValueSourceParser {
@@ -45,14 +42,14 @@ public class TermFrequencyOfFrequenciesAgg extends SimpleAggValueSource {
   private static class Merger extends FacetMerger {
     private final TermFrequencyCounter result;
 
-    public Merger(int termLimit) {
+    public Merger() {
       this.result = new TermFrequencyCounter();
     }
 
     @Override
     public void merge(Object facetResult, Context mcontext) {
-      if (facetResult instanceof Map) {
-        result.merge((Map<String, Integer>) facetResult);
+      if (facetResult instanceof SimpleOrderedMap) {
+        result.merge((SimpleOrderedMap<Object>) facetResult);
       }
     }
 
@@ -63,12 +60,7 @@ public class TermFrequencyOfFrequenciesAgg extends SimpleAggValueSource {
 
     @Override
     public Object getMergedResult() {
-      Map<Integer, Integer> map = new LinkedHashMap<>();
-
-      result.getCounters()
-        .forEach((value, freq) -> map.merge(freq, 1, Integer::sum));
-
-      return map;
+      return result.toFrequencyOfFrequencies();
     }
   }
 }

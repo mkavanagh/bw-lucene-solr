@@ -2,10 +2,10 @@ package org.apache.solr.search.facet;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.function.IntFunction;
 
 import org.apache.lucene.queries.function.ValueSource;
+import org.apache.solr.common.util.SimpleOrderedMap;
 
 public class TermFrequencySlotAcc extends FuncSlotAcc {
   private TermFrequencyCounter[] result;
@@ -33,10 +33,18 @@ public class TermFrequencySlotAcc extends FuncSlotAcc {
 
   @Override
   public Object getValue(int slotNum) {
-    if (result[slotNum] != null) {
-      return result[slotNum].serialize(termLimit);
+    if (fcontext.isShard()) {
+      if (result[slotNum] != null) {
+        return result[slotNum].serialize(termLimit);
+      } else {
+        return new SimpleOrderedMap<>();
+      }
     } else {
-      return Collections.emptyList();
+      if (result[slotNum] != null) {
+        return result[slotNum].toFrequencyOfFrequencies();
+      } else {
+        return new SimpleOrderedMap<>();
+      }
     }
   }
 
